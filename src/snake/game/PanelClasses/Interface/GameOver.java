@@ -7,8 +7,7 @@ import static snake.game.GamePanel.*;
 
 public class GameOver extends JFrame {
     public GameOver(Graphics g, int applesEaten, int bestScore) {
-
-        new Background(g);
+        new Background(g,Color.black,Color.black);
 
         g.setColor((Color.black));
         g.fillRect(32,64,576,576);
@@ -22,6 +21,6 @@ public class GameOver extends JFrame {
 
         g.setColor(Color.white);
         g.setFont( new Font("Ink Free",Font.BOLD, 25));
-        g.drawString("Press Esc to exit      Press R to play again", ((SCREEN_WIDTH - metrics2.stringWidth("Press Esc to exit      Press R to play again"))/2)+475, (SCREEN_HEIGHT/2)+60);
+        g.drawString("Press Esc to exit      Press R to play again", 510+((SCREEN_WIDTH - metrics2.stringWidth("Press Esc to exit      Press R to play again"))/2), (SCREEN_HEIGHT/2)+60);
     }
 }

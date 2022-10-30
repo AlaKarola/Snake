@@ -6,10 +6,10 @@ import static snake.game.GamePanel.*;
 import static snake.game.GamePanel.UNIT_SIZE;
 
 public class Background {
-    public Background(Graphics g){
-        Color color1 = new Color(31, 99, 28);
-        Color color2 = new Color(37, 117, 33);
+    public Background(Graphics g, Color color1, Color color2){
+
         Color color3;
+        Color ramka = new Color(110, 53, 14);
         for(int i = 0; i < SCREEN_HEIGHT; i += UNIT_SIZE) {
             color3 = color1;
             color1 = color2;
@@ -21,10 +21,10 @@ public class Background {
                     else
                         g.setColor(color2);
                 } else {
-                    g.setColor(new Color(110, 53, 14));
+                    g.setColor(ramka);
                 }
                 if (j == 0 || j == 608 || i > 608) {
-                    g.setColor(new Color(110, 53, 14));//139,69,19
+                    g.setColor(ramka);
                 }
                 g.fillRect(j, i, UNIT_SIZE, UNIT_SIZE);
             }

@@ -14,13 +14,14 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener{
 
-    static public final int SCREEN_WIDTH = 640;//650 1300;
-    static public final int SCREEN_HEIGHT = 672;//375 750;
+    static public final int SCREEN_WIDTH = 640;
+    static public final int SCREEN_HEIGHT = 672;
     static public final int UNIT_SIZE = 32;
     static public final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/(UNIT_SIZE*UNIT_SIZE);
     static public final int DELAY = 100;
-    static final public int x[] = new int[GAME_UNITS];
-    static final public int y[] = new int[GAME_UNITS];
+    static public int x[] = new int[GAME_UNITS];
+    static public int y[] = new int[GAME_UNITS];
+    static public char body[] = new char[GAME_UNITS];
     int snakeX = x[0];
     int snakeY = y[0];
     int bodyParts = 3;
@@ -42,6 +43,7 @@ public class GamePanel extends JPanel implements ActionListener{
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        clearArray();
         startGame();
     }
 
@@ -55,6 +57,9 @@ public class GamePanel extends JPanel implements ActionListener{
         direction = 'R';
         x[0] = UNIT_SIZE*6;
         y[0] = UNIT_SIZE*12;
+        body[0] = 'R';
+        body[1] = 'R';
+        body[2] = 'R';
 
         bodyParts = 3;
         running = true;
@@ -63,17 +68,25 @@ public class GamePanel extends JPanel implements ActionListener{
             bestScore = BestScore.getScore();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Error found: File scores not found.");
+            System.out.println("Error found: File 'scores' not found.");
+        }
+    }
+
+    public void clearArray(){
+        for(int i = 0; i < x.length; i++){
+            x[i] = 0;
+            y[i] = 0;
         }
     }
 
     public void paintComponent(Graphics g) {
             super.paintComponent(g);
                 draw(g);
-    }   //(i / UNIT_SIZE) % 2 == 0 ? 0 : UNIT_SIZE
+    }
+
     public void draw(Graphics g) {
         if(alive) {
-            new Background(g);
+            new Background(g,new Color(31, 99, 28),new Color(37, 117, 33));
             g.drawImage(apple, appleX, appleY, null);
             new ImageChange(g,direction,bodyParts);
             new DrawScore(g,applesEaten,bestScore);
@@ -83,12 +96,14 @@ public class GamePanel extends JPanel implements ActionListener{
         }
         else {
             new GameOver(g, applesEaten, bestScore);
+
             try{
                 new BestScore(bestScore);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                System.out.println("Error found: File scores not found.");
+                System.out.println("Error found: File 'scores' not found.");
             }
+
         }
     }
 
@@ -107,6 +122,13 @@ public class GamePanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
             if(running) {
+                char temp[] = new char [GAME_UNITS];
+                temp[0]=direction;
+                if (bodyParts >= 0) System.arraycopy(body, 0, temp, 1, bodyParts);
+                body = temp;
+                if(body[bodyParts-1]!=body[bodyParts-2]){
+                    body[bodyParts-1] = body[bodyParts-2];
+                }
                 new Move(snakeX, snakeY, bodyParts, direction);
                 checkApple();
             } else {
