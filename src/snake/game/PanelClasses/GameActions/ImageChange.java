@@ -7,16 +7,6 @@ import static snake.game.GamePanel.*;
 public class ImageChange {
     public ImageChange(Graphics g, char direction, int bodyParts){
 
-        Image headUp = Toolkit.getDefaultToolkit().getImage("./resources/headU.png");
-        Image headDown = Toolkit.getDefaultToolkit().getImage("./resources/headD.png");
-        Image headLeft = Toolkit.getDefaultToolkit().getImage("./resources/headL.png");
-        Image headRight = Toolkit.getDefaultToolkit().getImage("./resources/headR.png");
-
-        Image tailU = Toolkit.getDefaultToolkit().getImage("./resources/tailU.png");
-        Image tailD = Toolkit.getDefaultToolkit().getImage("./resources/tailD.png");
-        Image tailL = Toolkit.getDefaultToolkit().getImage("./resources/tailL.png");
-        Image tailR = Toolkit.getDefaultToolkit().getImage("./resources/tailR.png");
-
         for(int i = 0; i< bodyParts;i++) {
             if(i == 0) {
                 if(direction == 'U'){
@@ -41,8 +31,18 @@ public class ImageChange {
                         g.drawImage(tailR, x[i], y[i], null);
                     }
                 } else {
-                    g.setColor(new Color(0, 24, 180));
-                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                    if(body[i-1]=='L'&&body[i]=='D'||body[i-1]=='U'&&body[i]=='R'){
+                        g.drawImage(curve3, x[i], y[i], null);
+                    } else if(body[i-1]=='R'&&body[i]=='U'||body[i-1]=='D'&&body[i]=='L'){
+                        g.drawImage(curve1, x[i], y[i], null);
+                    } else if(body[i-1]=='U'&&body[i]=='L'||body[i-1]=='R'&&body[i]=='D'){
+                        g.drawImage(curve4, x[i], y[i], null);
+                    } else if(body[i-1]=='D'&&body[i]=='R'||body[i-1]=='L'&&body[i]=='U') {
+                        g.drawImage(curve2, x[i], y[i], null);
+                    } else {
+                        g.setColor(new Color(0, 24, 180));
+                        g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                    }
                 }
             }
         }

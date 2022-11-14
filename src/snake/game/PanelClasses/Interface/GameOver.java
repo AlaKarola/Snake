@@ -17,10 +17,14 @@ public class GameOver extends JFrame {
         g.setColor(Color.CYAN);
         g.setFont( new Font("Ink Free",Font.BOLD, 75));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
+        g.drawString("Game Over",
+                (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2,
+                SCREEN_HEIGHT/2);
 
         g.setColor(Color.white);
         g.setFont( new Font("Ink Free",Font.BOLD, 25));
-        g.drawString("Press Esc to exit      Press R to play again", 510+((SCREEN_WIDTH - metrics2.stringWidth("Press Esc to exit      Press R to play again"))/2), (SCREEN_HEIGHT/2)+60);
+        g.drawString("Press Esc to exit      Press R to play again",
+                (SCREEN_WIDTH - metrics2.stringWidth("123456789"))/2-10,
+                (SCREEN_HEIGHT/2)+60);
     }
 }
