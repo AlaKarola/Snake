@@ -1,4 +1,4 @@
-package snake.game.PanelClasses.Interface;
+package snake.game.GamePanelClasses.Interface;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package snake.game.PanelClasses.GameActions;
+package snake.game.GamePanelClasses.GameActions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,11 +10,11 @@ public class BestScore{
         File file = new File("./resources/scores.txt");
         int score = 0;
         Scanner input = new Scanner(file);
-            while (input.hasNext()) {
+        while (input.hasNext()) {
             String word  = input.next();
             score = Integer. parseInt(word);
         }
-            return score;
+        return score;
     }
 
     public BestScore(int bestScore) throws FileNotFoundException{

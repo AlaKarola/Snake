@@ -1,10 +1,13 @@
 package snake.game;
 
-import snake.game.PanelClasses.GameActions.*;
-import snake.game.PanelClasses.Interface.Background;
-import snake.game.PanelClasses.Interface.DrawScore;
-import snake.game.PanelClasses.Interface.GameOver;
-import snake.game.PanelClasses.Interface.GamePaused;
+import snake.game.GamePanelClasses.GameActions.*;
+import snake.game.GamePanelClasses.Instances.DirectionChange;
+import snake.game.GamePanelClasses.Instances.WarmUp;
+import snake.game.GamePanelClasses.Interface.Background;
+import snake.game.GamePanelClasses.Interface.GameOver;
+import snake.game.GamePanelClasses.Interface.GamePaused;
+import snake.game.GamePanelClasses.SnakeDTO;
+import snake.game.GamePanelClasses.SnakeControlsKeyEvent;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,28 +15,18 @@ import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
-public class GamePanel extends JPanel implements ActionListener{
 
-    static public final int SCREEN_WIDTH = 640;
-    static public final int SCREEN_HEIGHT = 672;
+public class GamePanel extends JPanel implements ActionListener{
     static public final int UNIT_SIZE = 32;
+    static public final int SCREEN_WIDTH = UNIT_SIZE*20;
+    static public final int SCREEN_HEIGHT = UNIT_SIZE*21;
     static public final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/(UNIT_SIZE*UNIT_SIZE);
-    static public final int DELAY = 100;
-    static public int x[] = new int[GAME_UNITS];
-    static public int y[] = new int[GAME_UNITS];
-    static public char body[] = new char[GAME_UNITS];
-    int snakeX = x[0];
-    int snakeY = y[0];
-    int bodyParts = 3;
-    int applesEaten;
-    int bestScore;
-    char direction = 'R';
+    static public final int DELAY = 100; ///////////////////////////////////////////////////////////
+    public static boolean escPressed = false;
+    public static int bestScore;
     int appleX;
     int appleY;
     int warmUp = 0;
-    boolean running = false;
-    boolean alive = false;
-    boolean escPressed = false;
     Timer timer;
     Random random;
     public static Image apple = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
@@ -52,13 +45,19 @@ public class GamePanel extends JPanel implements ActionListener{
     public static Image curve3 = Toolkit.getDefaultToolkit().getImage("./resources/curve3.png");
     public static Image curve4 = Toolkit.getDefaultToolkit().getImage("./resources/curve4.png");
 
+    public static SnakeDTO Snake1;
+    public static SnakeDTO Snake2;
+
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        this.addKeyListener(new MyKeyAdapter());
-        clearArray();
+        this.addKeyListener(new SnakeKeyAdapter());
+        Snake2 = new SnakeDTO();
+        Snake1 = new SnakeDTO();
+        clearArray(Snake1.x,Snake1.y);
+        clearArray(Snake2.x,Snake2.y);
         startGame();
     }
 
@@ -68,17 +67,27 @@ public class GamePanel extends JPanel implements ActionListener{
 
         appleX = NewApple.newAppleX();
         appleY = NewApple.newAppleY();
-        applesEaten = 0;
-        direction = 'R';
-        x[0] = UNIT_SIZE*6;
-        y[0] = UNIT_SIZE*12;
-        body[0] = 'R';
-        body[1] = 'R';
-        body[2] = 'R';
 
-        bodyParts = 3;
-        running = true;
-        alive = true;
+        Snake1.x[0] = Snake1.x[1]= Snake1.x[2] = UNIT_SIZE;
+        Snake1.y[0] = UNIT_SIZE*12;
+        Snake1.y[1] = UNIT_SIZE*13;
+        Snake1.y[2] = UNIT_SIZE*14;
+        Snake1.body[0] = Snake1.body[1] = Snake1.body[2] = 'U';
+        Snake1.controls = "wasd";
+
+        Snake1.direction = Snake2.direction = 'U';
+        Snake1.applesEaten = Snake2.applesEaten = 0;
+        Snake1.bodyParts = Snake2.bodyParts = 3;
+        Snake1.running = Snake2.running = false;
+        Snake1.alive = Snake2.alive = false;
+
+        Snake2.x[0] = Snake2.x[1]= Snake2.x[2] = UNIT_SIZE*5;
+        Snake2.y[0] = UNIT_SIZE*12;
+        Snake2.y[1] = UNIT_SIZE*13;
+        Snake2.y[2] = UNIT_SIZE*14;
+        Snake2.body[0] = Snake2.body[1] = Snake2.body[2] = 'D';
+        Snake2.controls = "ijkl";
+
         try{
             bestScore = BestScore.getScore();
         } catch (FileNotFoundException e) {
@@ -87,7 +96,7 @@ public class GamePanel extends JPanel implements ActionListener{
         }
     }
 
-    public void clearArray(){
+    public void clearArray(int[] x, int[] y){
         for(int i = 0; i < x.length; i++){
             x[i] = 0;
             y[i] = 0;
@@ -95,124 +104,108 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-                draw(g);
+        super.paintComponent(g);
+        draw(g);
     }
 
     public void draw(Graphics g) {
-        if(alive) {
+        if(Snake1.alive&&Snake2.alive) {
             if(warmUp<1){
                 WarmUp.imageWarmUp(g);
                 warmUp++;
             }
+            g.setFont( new Font("Ink Free",Font.BOLD, 40));
             new Background(g,new Color(31, 99, 28),new Color(37, 117, 33));
             g.drawImage(apple, appleX, appleY, null);
-            new ImageChange(g,direction,bodyParts);
-            new DrawScore(g,applesEaten,bestScore);
-            if(!running){
+            g.setColor(Color.WHITE);
+            String s1s = "" + (Snake1.bodyParts-3);
+            String s2s = "" + (Snake2.bodyParts-3);
+            g.setColor(new Color(0, 24, 180));
+            g.drawString(s1s, 2*UNIT_SIZE, UNIT_SIZE+UNIT_SIZE/3);
+            g.setColor(new Color(120, 61, 185));
+            g.drawString(s2s, 12*UNIT_SIZE, UNIT_SIZE+UNIT_SIZE/3);
+            new ImageChange(g,Snake1,new Color(0, 24, 180));
+            new ImageChange(g,Snake2,new Color(120, 61, 185));
+
+            if(!Snake1.running&&!Snake2.running){
                 new GamePaused(g);
             }
         }
         else {
-            new GameOver(g, applesEaten, bestScore);
-
+            new GameOver(g, Snake1.applesEaten, bestScore);
             try{
                 new BestScore(bestScore);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 System.out.println("Error found: File 'scores' not found.");
             }
-
         }
     }
 
-    public void checkApple() {
-        if((x[0] == appleX) && (y[0] == appleY)) {
-            bodyParts++;
-            applesEaten++;
-            appleX = NewApple.newAppleX();
-            appleY = NewApple.newAppleY();
-            if(applesEaten>bestScore){
-                bestScore=applesEaten;
+    public static boolean CheckApple(SnakeDTO Snake, int appleX, int appleY) {
+        if((Snake.x[0] == appleX) && (Snake.y[0] == appleY)) {
+            Snake.bodyParts++;
+            Snake.applesEaten++;
+            if(Snake.applesEaten>bestScore){
+                bestScore=Snake.applesEaten;
             }
+            return true;
         }
+        return false;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-            if(running) {
-                char temp[] = new char [GAME_UNITS];
-                temp[0]=direction;
-                if (bodyParts >= 0) System.arraycopy(body, 0, temp, 1, bodyParts);
-                body = temp;
-                if(body[bodyParts-1]!=body[bodyParts-2]){
-                    body[bodyParts-1] = body[bodyParts-2];
-                }
-                new Move(snakeX, snakeY, bodyParts, direction);
-                checkApple();
-            } else {
-                for(int i = bodyParts;i>0;i--) {
-                    x[i] = x[i];
-                    y[i] = y[i];
-                }
-            }
-            if(!CheckCollisions.checkCollisions(bodyParts)) {
-                alive = false;
-                timer.stop();
-            }
-            repaint();
-    }
+        if(Snake1.running && Snake2.running) {
+            new DirectionChange(Snake1);
+            new DirectionChange(Snake2);
+            new Move(Snake1);
+            new Move(Snake2);
 
-    public class MyKeyAdapter extends KeyAdapter{
+            if (CheckApple(Snake1, appleX, appleY)) {
+                appleX = NewApple.newAppleX();
+                appleY = NewApple.newAppleY();
+            }
+            if (CheckApple(Snake2, appleX,appleY)) {
+                appleX = NewApple.newAppleX();
+                appleY = NewApple.newAppleY();
+            }
+        }
+        Snake1.alive = CheckCollisions.checkCollisions(Snake1, Snake2);
+        Snake2.alive = CheckCollisions.checkCollisions(Snake2, Snake1);
+        if(!Snake1.alive || !Snake2.alive) {
+            timer.stop();
+        }
+        repaint();
+    }
+    public class SnakeKeyAdapter extends KeyAdapter{
+
         @Override
         public void keyPressed(KeyEvent e) {
 
-                switch(e.getKeyCode()) {
-                    case KeyEvent.VK_ESCAPE:
-                        if(!escPressed) {
-                            escPressed = true;
-                            running = false;
-                        }
-                        else {
-                            escPressed = false;
-                            running = true;
-                        }
-                        if(!alive) System.exit(0);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        if(direction != 'R') {
-                            if(running){
-                                direction = 'L';
-                            }
-                        }
-                        break;
-                    case KeyEvent.VK_R:
-                        if(!alive){
-                            startGame();
-                        }
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        if(direction != 'L') {
-                            if(running){
-                                direction = 'R';
-                            }
-                        }
-                        break;
-                    case KeyEvent.VK_UP:
-                        if(direction != 'D') {
-                            if(running){
-                                direction = 'U';
-                            }
-                        }
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        if(direction != 'U') {
-                            if(running){
-                                direction = 'D';
-                            }
-                        }
-                        break;
-                }
+            switch(e.getKeyCode()) {
+                case KeyEvent.VK_SPACE:
+                    System.out.println("excPressed: " + escPressed);
+                    if (!escPressed) {
+                        escPressed = true;
+                        Snake1.running = false;
+                        Snake2.running = false;
+                    } else {
+                        escPressed = false;
+                        Snake1.running = true;
+                        Snake2.running = true;
+                    }
+                case KeyEvent.VK_ESCAPE:
+                    if (!Snake1.alive || !Snake2.alive) System.exit(0);
+                    break;
+                case KeyEvent.VK_R:
+                    if(!Snake1.alive || !Snake2.alive){
+                        startGame();
+                    }
+                    break;
+            }
+            new SnakeControlsKeyEvent(e, Snake1);
+            new SnakeControlsKeyEvent(e, Snake2);
         }
     }
 }
