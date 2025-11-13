@@ -18,7 +18,6 @@ public class MenuPanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MenuKeyAdapter());
-
     }
 
     @Override
@@ -41,7 +40,9 @@ public class MenuPanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
 
             switch(e.getKeyCode()) {
+                case KeyEvent.VK_P: {
 
+                }
 
             }
         }

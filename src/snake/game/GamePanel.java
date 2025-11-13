@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements ActionListener{
     int appleX;
     int appleY;
     int warmUp = 0;
+    int snakeAmount = 1;
     Timer timer;
     Random random;
     public static Image apple = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
@@ -54,10 +55,17 @@ public class GamePanel extends JPanel implements ActionListener{
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new SnakeKeyAdapter());
-        Snake2 = new SnakeDTO();
-        Snake1 = new SnakeDTO();
+        switch (snakeAmount) {
+            case 1 -> {
+                Snake1 = new SnakeDTO();
+            }
+            case 2 -> {
+                Snake1 = new SnakeDTO();
+                Snake2 = new SnakeDTO();
+            }
+        }
         clearArray(Snake1.x,Snake1.y);
-        clearArray(Snake2.x,Snake2.y);
+        //clearArray(Snake2.x,Snake2.y);
         startGame();
     }
 
@@ -75,18 +83,18 @@ public class GamePanel extends JPanel implements ActionListener{
         Snake1.body[0] = Snake1.body[1] = Snake1.body[2] = 'U';
         Snake1.controls = "wasd";
 
-        Snake1.direction = Snake2.direction = 'U';
-        Snake1.applesEaten = Snake2.applesEaten = 0;
-        Snake1.bodyParts = Snake2.bodyParts = 3;
-        Snake1.running = Snake2.running = false;
-        Snake1.alive = Snake2.alive = false;
+        Snake1.direction = 'U'; //Snake2.direction = 'U';
+        Snake1.applesEaten = 0; //Snake2.applesEaten = 0;
+        Snake1.bodyParts = 3; //Snake2.bodyParts = 3;
+        Snake1.running = false; //Snake2.running = false;
+        Snake1.alive = false; //Snake2.alive = false;
 
-        Snake2.x[0] = Snake2.x[1]= Snake2.x[2] = UNIT_SIZE*5;
-        Snake2.y[0] = UNIT_SIZE*12;
-        Snake2.y[1] = UNIT_SIZE*13;
-        Snake2.y[2] = UNIT_SIZE*14;
-        Snake2.body[0] = Snake2.body[1] = Snake2.body[2] = 'D';
-        Snake2.controls = "ijkl";
+//        Snake2.x[0] = Snake2.x[1]= Snake2.x[2] = UNIT_SIZE*5;
+//        Snake2.y[0] = UNIT_SIZE*12;
+//        Snake2.y[1] = UNIT_SIZE*13;
+//        Snake2.y[2] = UNIT_SIZE*14;
+//        Snake2.body[0] = Snake2.body[1] = Snake2.body[2] = 'D';
+//        Snake2.controls = "ijkl";
 
         try{
             bestScore = BestScore.getScore();
@@ -109,7 +117,7 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     public void draw(Graphics g) {
-        if(Snake1.alive&&Snake2.alive) {
+        if(Snake1.alive ) { //&&Snake2.alive) {
             if(warmUp<1){
                 WarmUp.imageWarmUp(g);
                 warmUp++;
@@ -119,15 +127,15 @@ public class GamePanel extends JPanel implements ActionListener{
             g.drawImage(apple, appleX, appleY, null);
             g.setColor(Color.WHITE);
             String s1s = "" + (Snake1.bodyParts-3);
-            String s2s = "" + (Snake2.bodyParts-3);
+            //String s2s = "" + (Snake2.bodyParts-3);
             g.setColor(new Color(0, 24, 180));
             g.drawString(s1s, 2*UNIT_SIZE, UNIT_SIZE+UNIT_SIZE/3);
             g.setColor(new Color(120, 61, 185));
-            g.drawString(s2s, 12*UNIT_SIZE, UNIT_SIZE+UNIT_SIZE/3);
+            //g.drawString(s2s, 12*UNIT_SIZE, UNIT_SIZE+UNIT_SIZE/3);
             new ImageChange(g,Snake1,new Color(0, 24, 180));
-            new ImageChange(g,Snake2,new Color(120, 61, 185));
+            //new ImageChange(g,Snake2,new Color(120, 61, 185));
 
-            if(!Snake1.running&&!Snake2.running){
+            if(!Snake1.running) { //&&!Snake2.running){
                 new GamePaused(g);
             }
         }
@@ -156,24 +164,24 @@ public class GamePanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(Snake1.running && Snake2.running) {
+        if(Snake1.running ) { //&& Snake2.running) {
             new DirectionChange(Snake1);
-            new DirectionChange(Snake2);
+            //new DirectionChange(Snake2);
             new Move(Snake1);
-            new Move(Snake2);
+            //new Move(Snake2);
 
             if (CheckApple(Snake1, appleX, appleY)) {
                 appleX = NewApple.newAppleX();
                 appleY = NewApple.newAppleY();
             }
-            if (CheckApple(Snake2, appleX,appleY)) {
-                appleX = NewApple.newAppleX();
-                appleY = NewApple.newAppleY();
-            }
+//            if (CheckApple(Snake2, appleX,appleY)) {
+//                appleX = NewApple.newAppleX();
+//                appleY = NewApple.newAppleY();
+//            }
         }
-        Snake1.alive = CheckCollisions.checkCollisions(Snake1, Snake2);
-        Snake2.alive = CheckCollisions.checkCollisions(Snake2, Snake1);
-        if(!Snake1.alive || !Snake2.alive) {
+        Snake1.alive = CheckCollisions.checkCollisions(Snake1 ); //, Snake2);
+        //Snake2.alive = CheckCollisions.checkCollisions(Snake2, Snake1);
+        if(!Snake1.alive ) {//|| !Snake2.alive) {
             timer.stop();
         }
         repaint();
@@ -189,23 +197,23 @@ public class GamePanel extends JPanel implements ActionListener{
                     if (!escPressed) {
                         escPressed = true;
                         Snake1.running = false;
-                        Snake2.running = false;
+                        //Snake2.running = false;
                     } else {
                         escPressed = false;
                         Snake1.running = true;
-                        Snake2.running = true;
+                        //Snake2.running = true;
                     }
                 case KeyEvent.VK_ESCAPE:
-                    if (!Snake1.alive || !Snake2.alive) System.exit(0);
+                    if (!Snake1.alive ) System.exit(0); //|| !Snake2.alive) System.exit(0);
                     break;
                 case KeyEvent.VK_R:
-                    if(!Snake1.alive || !Snake2.alive){
+                    if(!Snake1.alive ) { // || !Snake2.alive){
                         startGame();
                     }
                     break;
             }
             new SnakeControlsKeyEvent(e, Snake1);
-            new SnakeControlsKeyEvent(e, Snake2);
+            //new SnakeControlsKeyEvent(e, Snake2);
         }
     }
 }
