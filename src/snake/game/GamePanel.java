@@ -5,37 +5,37 @@ import snake.game.PanelClasses.Interface.Background;
 import snake.game.PanelClasses.Interface.DrawScore;
 import snake.game.PanelClasses.Interface.GameOver;
 import snake.game.PanelClasses.Interface.GamePaused;
+import snake.game.PanelClasses.Objects.Apple;
+import snake.game.PanelClasses.Objects.Controls;
+import snake.game.PanelClasses.Objects.Snake;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener{
-
-    static public final int SCREEN_WIDTH = 640;
-    static public final int SCREEN_HEIGHT = 672;
     static public final int UNIT_SIZE = 32;
-    static public final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/(UNIT_SIZE*UNIT_SIZE);
+
+    static public final int SCREEN_WIDTH = 20*UNIT_SIZE;
+    static public final int SCREEN_HEIGHT = 21*UNIT_SIZE;
+
+    static public final int GAME_UNITS = // The amount of units
+            (SCREEN_WIDTH*SCREEN_HEIGHT) / (UNIT_SIZE*UNIT_SIZE);
     static public final int DELAY = 100;
-    static public int x[] = new int[GAME_UNITS];
-    static public int y[] = new int[GAME_UNITS];
-    static public char body[] = new char[GAME_UNITS];
-    int snakeX = x[0];
-    int snakeY = y[0];
-    int bodyParts = 3;
-    int applesEaten;
+
     int bestScore;
-    char direction = 'R';
-    int appleX;
-    int appleY;
-    int warmUp = 0;
-    boolean running = false;
-    boolean alive = false;
+
+    File sprite = new File("./resources/sprite.png");
+
     boolean escPressed = false;
+
+
     Timer timer;
     Random random;
+
     public static Image apple = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
     public static Image headUp = Toolkit.getDefaultToolkit().getImage("./resources/headU.png");
     public static Image headDown = Toolkit.getDefaultToolkit().getImage("./resources/headD.png");
@@ -64,19 +64,20 @@ public class GamePanel extends JPanel implements ActionListener{
 
     public void startGame() {
         timer = new Timer(DELAY,this);
-        timer.start();
+
+        Apple apple = new Apple();
+        Snake snake = new Snake(Controls.WASD);
 
         appleX = NewApple.newAppleX();
         appleY = NewApple.newAppleY();
-        applesEaten = 0;
-        direction = 'R';
+
+
         x[0] = UNIT_SIZE*6;
         y[0] = UNIT_SIZE*12;
         body[0] = 'R';
         body[1] = 'R';
         body[2] = 'R';
 
-        bodyParts = 3;
         running = true;
         alive = true;
         try{
@@ -85,6 +86,7 @@ public class GamePanel extends JPanel implements ActionListener{
             e.printStackTrace();
             System.out.println("Error found: File 'scores' not found.");
         }
+        timer.start();
     }
 
     public void clearArray(){
