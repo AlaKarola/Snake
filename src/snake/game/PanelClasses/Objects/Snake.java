@@ -25,8 +25,8 @@ public class Snake {
     int snakeY;
     int bodyParts;
     int applesEaten;
-    boolean running = false;
-    boolean alive = false;
+    boolean running;
+    boolean alive;
     Controls controls;
 
     public Snake(Controls con) {

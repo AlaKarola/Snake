@@ -11,11 +11,17 @@ import snake.game.PanelClasses.Objects.Snake;
 
 import java.awt.*;
 import java.awt.event.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
+import static javax.imageio.ImageIO.read;
 import static snake.game.PanelClasses.Interface.Score.getBestScore;
 import static snake.game.PanelClasses.Interface.Score.setBestScore;
 
@@ -43,6 +49,8 @@ public class GamePanel extends JPanel implements ActionListener{
     public Snake snake;
 
     //public static Image apple = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
+    public static BufferedImage images;
+
     public static Image headUp = Toolkit.getDefaultToolkit().getImage("./resources/headU.png");
     public static Image headDown = Toolkit.getDefaultToolkit().getImage("./resources/headD.png");
     public static Image headLeft = Toolkit.getDefaultToolkit().getImage("./resources/headL.png");
@@ -63,11 +71,23 @@ public class GamePanel extends JPanel implements ActionListener{
         apple = new Apple();
         snake = new Snake(Controls.WASD);
 
+        try {
+            images = ImageIO.read(
+                    Objects.requireNonNull(
+                            getClass().getResource("/sprite.png")
+                    )
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        apple.setImage(images.getSubimage(34, 34, 32, 32));
+
+
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
-
 
         snake.clearArray();
         startGame();
@@ -109,6 +129,15 @@ public class GamePanel extends JPanel implements ActionListener{
             snake.ImageChange(g,snake.getDirection(),snake.getBodyParts());
             new Score(g,snake.getApplesEaten(),bestScore);
 
+//            Graphics2D g2d = (Graphics2D) g; // OBROT poprawny
+//
+//            AffineTransform old = g2d.getTransform();
+//
+//            g2d.rotate(Math.toRadians(90), apple.getAppleX()+16, apple.getAppleY()+16);
+//            g2d.drawImage(images.getSubimage(34, 34, 32, 32), apple.getAppleX(), apple.getAppleY(), null);
+//
+//            g2d.setTransform(old);
+
             if(!snake.isRunning()){
                 new GamePaused(g);
             }
@@ -139,12 +168,7 @@ public class GamePanel extends JPanel implements ActionListener{
                 snake.Move();
                 apple.checkApple(snake);
             }
-//            } else {
-//                for(int i = snake.getBodyParts();i>0;i--) {
-//                    x[i] = x[i];
-//                    y[i] = y[i];
-//                }
-//            }
+
             if(!snake.checkCollisions()) {
                 snake.setAlive(false);
                 timer.stop();

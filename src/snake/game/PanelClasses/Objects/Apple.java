@@ -9,8 +9,8 @@ import java.util.Random;
 import static snake.game.GamePanel.*;
 
 public class Apple {
-    Image appleImage = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
-    //BufferedImage appleImage = ImageIO.read(new File());
+    //Image appleImage = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
+    BufferedImage testapple; // = ImageIO.read(new File("sprite.png"));
     int appleX;
     int appleY;
 
@@ -20,23 +20,23 @@ public class Apple {
     }
 
     public void checkApple(Snake snake) {
-        if((snake.x[0] == appleX) && (snake.y[0] == appleY)) {
+        if ((snake.x[0] == appleX) && (snake.y[0] == appleY)) {
             snake.bodyParts++;
             snake.applesEaten++;
             appleX = newAppleX();
             appleY = newAppleY();
-            if(snake.applesEaten>bestScore){
-                bestScore=snake.applesEaten;
+            if (snake.applesEaten > bestScore) {
+                bestScore = snake.applesEaten;
             }
         }
     }
 
-    public static int newAppleX(){
-        return random.nextInt(18)*UNIT_SIZE + 32;
+    public static int newAppleX() {
+        return random.nextInt(18) * UNIT_SIZE + 32;
     }
 
-    public static int newAppleY(){
-        return random.nextInt(18)*UNIT_SIZE + 64;
+    public static int newAppleY() {
+        return random.nextInt(18) * UNIT_SIZE + 64;
     }
 
     public int getAppleX() {
@@ -47,7 +47,11 @@ public class Apple {
         return appleY;
     }
 
-    public Image getImage() {
-        return appleImage;
+    public BufferedImage getImage() {
+        return testapple;
+    }
+
+    public void setImage(BufferedImage img) {
+        this.testapple = img;
     }
 }
