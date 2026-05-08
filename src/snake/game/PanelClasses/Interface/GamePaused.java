@@ -3,17 +3,20 @@ package snake.game.PanelClasses.Interface;
 import javax.swing.*;
 import java.awt.*;
 
-import static snake.game.GamePanel.SCREEN_HEIGHT;
-import static snake.game.GamePanel.SCREEN_WIDTH;
+import static snake.game.GamePanel.*;
 
 public class GamePaused extends JFrame {
     public GamePaused(Graphics g) {
         g.setColor(Color.CYAN);
         g.setFont( new Font("Ink Free",Font.BOLD, 75)); // origin: 75, red
-        FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("Paused", (SCREEN_WIDTH - metrics2.stringWidth("Paused"))/2, SCREEN_HEIGHT/2);
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        String info = "Paused";
+        g.drawString(info, (SCREEN_WIDTH - metrics.stringWidth(info))/2, (SCREEN_HEIGHT/2));
+
         g.setColor(Color.black);
         g.setFont( new Font("Ink Free",Font.BOLD, 25));
-        g.drawString("Press Esc to continue", ((SCREEN_WIDTH - metrics2.stringWidth("Press Esc to continue"))/2)+255, (SCREEN_HEIGHT/2)+60);
+        metrics = getFontMetrics(g.getFont());
+        info = "Press Space to continue";
+        g.drawString(info, ((SCREEN_WIDTH - metrics.stringWidth(info))/2), (SCREEN_HEIGHT/2)+(UNIT_SIZE*3)/2);
     }
 }

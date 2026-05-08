@@ -7,7 +7,6 @@ import static snake.game.GamePanel.UNIT_SIZE;
 
 public class Background {
     public Background(Graphics g, Color color1, Color color2){
-
         Color color3;
         Color ramka = new Color(110, 53, 14);
         for(int i = 0; i < SCREEN_HEIGHT; i += UNIT_SIZE) {

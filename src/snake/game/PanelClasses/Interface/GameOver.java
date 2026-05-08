@@ -12,7 +12,7 @@ public class GameOver extends JFrame {
         g.setColor((Color.black));
         g.fillRect(32,64,576,576);
 
-        new DrawScore(g,applesEaten,bestScore);
+        new Score(g,applesEaten,bestScore);
 
         g.setColor(Color.CYAN);
         g.setFont( new Font("Ink Free",Font.BOLD, 75));
