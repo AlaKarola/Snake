@@ -3,13 +3,10 @@ package snake.game.PanelClasses.Objects;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import static snake.game.GamePanel.*;
 import static snake.game.GamePanel.UNIT_SIZE;
-import static snake.game.GamePanel.curve1;
-import static snake.game.GamePanel.curve2;
-import static snake.game.GamePanel.curve3;
-import static snake.game.GamePanel.curve4;
 
 
 public class Snake {
@@ -64,51 +61,57 @@ public class Snake {
         }
     }
 
-    public void ImageChange(Graphics g, Directions direction, int bodyParts){
-        Graphics2D g2d = (Graphics2D) g;
-        AffineTransform old = g2d.getTransform();
-        for(int i = 0; i< bodyParts;i++) {
-            if(i == 0) {
-                if(direction == Directions.UP){
-                    g2d.rotate(Math.toRadians(360), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                } else if(direction == Directions.DOWN) {
-                    g2d.rotate(Math.toRadians(180), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                } else if(direction == Directions.LEFT) {
-                    g2d.rotate(Math.toRadians(270), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                } else if(direction == Directions.RIGHT) {
-                    g2d.rotate(Math.toRadians(90), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
+    public void ImageChange(Graphics g, Directions direction, int bodyParts) {
+        for (int i = 0; i < bodyParts; i++) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            if (i == 0) {
+                double angle = 0;
+                if (direction == Directions.UP) {
+                    angle = 0;
                 }
-                g2d.drawImage(images.getSubimage(0, 0, 32, 32), x[i], y[i], null);
-                g2d.setTransform(old);
-            }
-            else {
-                if(i==bodyParts-1){
-                    if(body[bodyParts-1] == Directions.UP){
-                        g2d.rotate(Math.toRadians(360), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                    } else if(body[bodyParts-1] == Directions.DOWN) {
-                        g2d.rotate(Math.toRadians(180), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                    } else if(body[bodyParts-1] == Directions.LEFT) {
-                        g2d.rotate(Math.toRadians(270), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
-                    } else if(body[bodyParts-1] == Directions.RIGHT) {
-                        g2d.rotate(Math.toRadians(90), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
+                else if (direction == Directions.RIGHT) {
+                    angle = 90;
+                }
+                else if (direction == Directions.DOWN) {
+                    angle = 180;
+                }
+                else if (direction == Directions.LEFT) {
+                    angle = 270;
+                }
+                drawRotated(g2d, images.getSubimage(0, 0, 32, 32), x[i], y[i], angle);
+            } else {
+                if (i == bodyParts - 1) {
+                    double angle = 0;
+                    if (body[bodyParts - 1] == Directions.UP) {
+                        angle = 0;
                     }
-                    g2d.drawImage(images.getSubimage(0, 34, 32, 32), x[i], y[i], null);
-                    g2d.setTransform(old);
+                    else if (body[bodyParts - 1] == Directions.RIGHT) {
+                        angle = 90;
+                    }
+                    else if (body[bodyParts - 1] == Directions.DOWN) {
+                        angle = 180;
+                    }
+                    else if (body[bodyParts - 1] == Directions.LEFT) {
+                        angle = 270;
+                    }
+                    drawRotated(g2d, images.getSubimage(0, 34, 32, 32), x[i], y[i], angle);
                 } else {
+                    BufferedImage curveSprite = images.getSubimage(34, 0, 32, 32);
                     if(body[i-1]==Directions.LEFT&&body[i]==Directions.DOWN||body[i-1]==Directions.UP&&body[i]==Directions.RIGHT){
-                        g.drawImage(curve3, x[i], y[i], null);
+                        drawRotated(g2d, curveSprite, x[i], y[i], 180);
                     } else if(body[i-1]==Directions.RIGHT&&body[i]==Directions.UP||body[i-1]==Directions.DOWN&&body[i]==Directions.LEFT){
-                        g.drawImage(curve1, x[i], y[i], null);
+                        drawRotated(g2d, curveSprite, x[i], y[i], 360);
                     } else if(body[i-1]==Directions.UP&&body[i]==Directions.LEFT||body[i-1]==Directions.RIGHT&&body[i]==Directions.DOWN){
-                        g.drawImage(curve4, x[i], y[i], null);
+                        drawRotated(g2d, curveSprite, x[i], y[i], 270);
                     } else if(body[i-1]==Directions.DOWN&&body[i]==Directions.RIGHT||body[i-1]==Directions.LEFT&&body[i]==Directions.UP) {
-                        g.drawImage(curve2, x[i], y[i], null);
+                        drawRotated(g2d, curveSprite, x[i], y[i], 90);
                     } else {
                         g.setColor(new Color(0, 24, 180));
                         g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                     }
                 }
             }
+            g2d.dispose();
         }
     }
 
@@ -142,6 +145,25 @@ public class Snake {
             System.out.println("-> Bottom Border Collision");
         }
         return alive;
+    }
+
+    private void drawRotated(Graphics2D g2d,
+                             BufferedImage image,
+                             int x,
+                             int y,
+                             double angle) {
+
+        AffineTransform at = new AffineTransform();
+
+        at.translate(x, y);
+
+        at.rotate(
+                Math.toRadians(angle),
+                image.getWidth() / 2.0,
+                image.getHeight() / 2.0
+        );
+
+        g2d.drawImage(image, at, null);
     }
 
     public void clearArray(){

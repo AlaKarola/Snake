@@ -37,11 +37,6 @@ public class GamePanel extends JPanel implements ActionListener{
     String message = "Press Space to play";
     Timer timer;
 
-    public static Image curve1 = Toolkit.getDefaultToolkit().getImage("./resources/curve1.png");
-    public static Image curve2 = Toolkit.getDefaultToolkit().getImage("./resources/curve2.png");
-    public static Image curve3 = Toolkit.getDefaultToolkit().getImage("./resources/curve3.png");
-    public static Image curve4 = Toolkit.getDefaultToolkit().getImage("./resources/curve4.png");
-
     GamePanel() {
         random = new Random();
         apple = new Apple();
