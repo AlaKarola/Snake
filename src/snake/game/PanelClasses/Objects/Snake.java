@@ -48,22 +48,18 @@ public class Snake {
             case UP -> {
                 y[0] = y[0] - UNIT_SIZE;
                 snakeY = y[0];
-                break;
             }
             case DOWN -> {
                 y[0] = y[0] + UNIT_SIZE;
                 snakeY = y[0];
-                break;
             }
             case LEFT -> {
                 x[0] = x[0] - UNIT_SIZE;
                 snakeX = x[0];
-                break;
             }
             case RIGHT -> {
                 x[0] = x[0] + UNIT_SIZE;
                 snakeX = x[0];
-                break;
             }
         }
     }
@@ -163,24 +159,8 @@ public class Snake {
         this.body = temp;
     }
 
-    public int getSnakeY() {
-        return snakeY;
-    }
-
-    public int getSnakeX() {
-        return snakeX;
-    }
-
-    public int getX(int index) {
-        return x[index];
-    }
-
     public void setX(int index, int value) {
         this.x[index] = value;
-    }
-
-    public int getY(int index) {
-        return y[index];
     }
 
     public void setY(int index, int value) {

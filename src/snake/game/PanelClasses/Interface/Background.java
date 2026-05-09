@@ -8,7 +8,7 @@ import static snake.game.GamePanel.UNIT_SIZE;
 public class Background {
     public Background(Graphics g, Color color1, Color color2){
         Color color3;
-        Color ramka = new Color(110, 53, 14);
+        Color border = new Color(110, 53, 14);
         for(int i = 0; i < SCREEN_HEIGHT; i += UNIT_SIZE) {
             color3 = color1;
             color1 = color2;
@@ -20,10 +20,10 @@ public class Background {
                     else
                         g.setColor(color2);
                 } else {
-                    g.setColor(ramka);
+                    g.setColor(border);
                 }
                 if (j == 0 || j == UNIT_SIZE*19 || i > UNIT_SIZE*19) {
-                    g.setColor(ramka);
+                    g.setColor(border);
                 }
                 g.fillRect(j, i, UNIT_SIZE, UNIT_SIZE);
             }

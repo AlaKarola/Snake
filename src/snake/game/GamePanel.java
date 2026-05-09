@@ -11,17 +11,11 @@ import snake.game.PanelClasses.Objects.Snake;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.Random;
 
-import static javax.imageio.ImageIO.read;
 import static snake.game.PanelClasses.Interface.Score.getBestScore;
 import static snake.game.PanelClasses.Interface.Score.setBestScore;
 
@@ -29,25 +23,19 @@ public class GamePanel extends JPanel implements ActionListener{
     static public final int UNIT_SIZE = 32;
     static public final int SCREEN_WIDTH = 20*UNIT_SIZE;
     static public final int SCREEN_HEIGHT = 21*UNIT_SIZE;
-    static public final int GAME_UNITS = // The amount of units
-            (SCREEN_WIDTH*SCREEN_HEIGHT) / (UNIT_SIZE*UNIT_SIZE);
+    static public final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT) / (UNIT_SIZE*UNIT_SIZE);
     static public final int DELAY = 100;
-
     public static int bestScore;
 
-    File sprite = new File("./resources/sprite.png");
-
-    boolean GamePaused = true;
-
-    Timer timer;
-    static public Random random;
+    public static BufferedImage images;
+    public static Random random;
 
     public Apple apple;
     public Snake snake;
+    boolean GamePaused = true;
     String status = "You are snake";
     String message = "Press Space to play";
-
-    public static BufferedImage images;
+    Timer timer;
 
     public static Image curve1 = Toolkit.getDefaultToolkit().getImage("./resources/curve1.png");
     public static Image curve2 = Toolkit.getDefaultToolkit().getImage("./resources/curve2.png");
@@ -128,7 +116,7 @@ public class GamePanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
             if(snake.isRunning()) {
-                Directions temp[] = new Directions[GAME_UNITS];
+                Directions[] temp = new Directions[GAME_UNITS];
                 temp[0] = snake.getDirection();
                 if (snake.getBodyParts() >= 0) System.arraycopy(snake.getBodyArray(), 0, temp, 1, snake.getBodyParts());
                 snake.setBodyArray(temp);
@@ -158,7 +146,6 @@ public class GamePanel extends JPanel implements ActionListener{
                             snake.setRunning(true);
                         }
                         if (!snake.isAlive()) System.exit(0);
-                        break;
                     }
                     case KeyEvent.VK_SPACE -> {
                         System.out.println("GamePaused status: " + GamePaused);
@@ -171,7 +158,6 @@ public class GamePanel extends JPanel implements ActionListener{
                             status = "Paused";
                             message = "Press Space to continue";
                         }
-                        break;
                     }
                     case KeyEvent.VK_R -> {
                         if (!snake.isAlive()) {
@@ -180,7 +166,6 @@ public class GamePanel extends JPanel implements ActionListener{
                         GamePaused = true;
                         status = "You are snake";
                         message = "Press Space to pla";
-                        break;
                     }
                     case KeyEvent.VK_A -> {
                         if (snake.getDirection() != Directions.RIGHT) {
@@ -188,7 +173,6 @@ public class GamePanel extends JPanel implements ActionListener{
                                 snake.setDirection(Directions.LEFT);
                             }
                         }
-                        break;
                     }
                     case KeyEvent.VK_D -> {
                         if (snake.getDirection() != Directions.LEFT) {
@@ -196,7 +180,6 @@ public class GamePanel extends JPanel implements ActionListener{
                                 snake.setDirection(Directions.RIGHT);
                             }
                         }
-                        break;
                     }
                     case KeyEvent.VK_W -> {
                         if (snake.getDirection() != Directions.DOWN) {
@@ -204,7 +187,6 @@ public class GamePanel extends JPanel implements ActionListener{
                                 snake.setDirection(Directions.UP);
                             }
                         }
-                        break;
                     }
                     case KeyEvent.VK_S -> {
                         if (snake.getDirection() != Directions.UP) {
@@ -212,7 +194,6 @@ public class GamePanel extends JPanel implements ActionListener{
                                 snake.setDirection(Directions.DOWN);
                             }
                         }
-                        break;
                     }
                 }
         }

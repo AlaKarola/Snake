@@ -34,7 +34,7 @@ public class Score extends JFrame {
     }
 
     public static void setBestScore(int bestScore) throws FileNotFoundException{
-        PrintWriter writer = new PrintWriter(new File("./resources/scores.txt"));
+        PrintWriter writer = new PrintWriter("./resources/scores.txt");
         writer.print(bestScore);
         writer.close();
     }

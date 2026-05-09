@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import static snake.game.GamePanel.*;
 
 public class Apple {
-    BufferedImage testapple;
+    BufferedImage appleImage;
     int appleX;
     int appleY;
 
@@ -45,10 +45,10 @@ public class Apple {
     }
 
     public BufferedImage getImage() {
-        return testapple;
+        return appleImage;
     }
 
     public void setImage(BufferedImage img) {
-        this.testapple = img;
+        this.appleImage = img;
     }
 }
