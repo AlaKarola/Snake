@@ -19,7 +19,7 @@ public class Score extends JFrame {
         String score = "Score: " + applesEaten;
         g.drawString(score, (UNIT_SIZE*2), g.getFont().getSize());
         score = "Best score: " + bestScore;
-        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 324")), g.getFont().getSize());
+        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 32")), g.getFont().getSize());
 
     }
 

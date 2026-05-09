@@ -10,21 +10,21 @@ public class GameOver extends JFrame {
         new Background(g,Color.black,Color.black);
 
         g.setColor((Color.black));
-        g.fillRect(32,64,576,576);
+        g.fillRect(UNIT_SIZE,UNIT_SIZE*2,UNIT_SIZE*18,UNIT_SIZE*18);
 
-        new Score(g,applesEaten,bestScore);
+        new Score(g, applesEaten, bestScore);
+
+        String status = "Game Over";
+        String message = "Press Esc to exit      Press R to play again";
 
         g.setColor(Color.CYAN);
         g.setFont( new Font("Ink Free",Font.BOLD, 75));
-        FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("Game Over",
-                (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2,
-                SCREEN_HEIGHT/2);
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString(status, (SCREEN_WIDTH - metrics.stringWidth(status))/2, SCREEN_HEIGHT/2);
 
         g.setColor(Color.white);
         g.setFont( new Font("Ink Free",Font.BOLD, 25));
-        g.drawString("Press Esc to exit      Press R to play again",
-                (SCREEN_WIDTH - metrics2.stringWidth("123456789"))/2-10,
-                (SCREEN_HEIGHT/2)+60);
+        metrics = getFontMetrics(g.getFont());
+        g.drawString(message, (SCREEN_WIDTH - metrics.stringWidth(message))/2, (SCREEN_HEIGHT/2)+UNIT_SIZE*3/2);
     }
 }

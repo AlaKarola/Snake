@@ -2,6 +2,7 @@ package snake.game.PanelClasses.Objects;
 
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 import static snake.game.GamePanel.*;
 import static snake.game.GamePanel.UNIT_SIZE;
@@ -9,12 +10,7 @@ import static snake.game.GamePanel.curve1;
 import static snake.game.GamePanel.curve2;
 import static snake.game.GamePanel.curve3;
 import static snake.game.GamePanel.curve4;
-import static snake.game.GamePanel.headLeft;
-import static snake.game.GamePanel.headRight;
-import static snake.game.GamePanel.tailD;
-import static snake.game.GamePanel.tailL;
-import static snake.game.GamePanel.tailR;
-import static snake.game.GamePanel.tailU;
+
 
 public class Snake {
     int[] x;
@@ -73,29 +69,35 @@ public class Snake {
     }
 
     public void ImageChange(Graphics g, Directions direction, int bodyParts){
+        Graphics2D g2d = (Graphics2D) g;
+        AffineTransform old = g2d.getTransform();
         for(int i = 0; i< bodyParts;i++) {
             if(i == 0) {
                 if(direction == Directions.UP){
-                    g.drawImage(headUp, x[i], y[i], null);
+                    g2d.rotate(Math.toRadians(360), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                 } else if(direction == Directions.DOWN) {
-                    g.drawImage(headDown, x[i], y[i], null);
+                    g2d.rotate(Math.toRadians(180), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                 } else if(direction == Directions.LEFT) {
-                    g.drawImage(headLeft, x[i], y[i], null);
+                    g2d.rotate(Math.toRadians(270), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                 } else if(direction == Directions.RIGHT) {
-                    g.drawImage(headRight, x[i], y[i], null);
+                    g2d.rotate(Math.toRadians(90), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                 }
+                g2d.drawImage(images.getSubimage(0, 0, 32, 32), x[i], y[i], null);
+                g2d.setTransform(old);
             }
             else {
                 if(i==bodyParts-1){
                     if(body[bodyParts-1] == Directions.UP){
-                        g.drawImage(tailU, x[i], y[i], null);
+                        g2d.rotate(Math.toRadians(360), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                     } else if(body[bodyParts-1] == Directions.DOWN) {
-                        g.drawImage(tailD, x[i], y[i], null);
+                        g2d.rotate(Math.toRadians(180), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                     } else if(body[bodyParts-1] == Directions.LEFT) {
-                        g.drawImage(tailL, x[i], y[i], null);
+                        g2d.rotate(Math.toRadians(270), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                     } else if(body[bodyParts-1] == Directions.RIGHT) {
-                        g.drawImage(tailR, x[i], y[i], null);
+                        g2d.rotate(Math.toRadians(90), x[i]+UNIT_SIZE/2, y[i]+UNIT_SIZE/2);
                     }
+                    g2d.drawImage(images.getSubimage(0, 34, 32, 32), x[i], y[i], null);
+                    g2d.setTransform(old);
                 } else {
                     if(body[i-1]==Directions.LEFT&&body[i]==Directions.DOWN||body[i-1]==Directions.UP&&body[i]==Directions.RIGHT){
                         g.drawImage(curve3, x[i], y[i], null);

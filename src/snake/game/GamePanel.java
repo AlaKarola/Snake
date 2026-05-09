@@ -27,10 +27,8 @@ import static snake.game.PanelClasses.Interface.Score.setBestScore;
 
 public class GamePanel extends JPanel implements ActionListener{
     static public final int UNIT_SIZE = 32;
-
     static public final int SCREEN_WIDTH = 20*UNIT_SIZE;
     static public final int SCREEN_HEIGHT = 21*UNIT_SIZE;
-
     static public final int GAME_UNITS = // The amount of units
             (SCREEN_WIDTH*SCREEN_HEIGHT) / (UNIT_SIZE*UNIT_SIZE);
     static public final int DELAY = 100;
@@ -39,27 +37,17 @@ public class GamePanel extends JPanel implements ActionListener{
 
     File sprite = new File("./resources/sprite.png");
 
-    boolean GamePaused = false;
-
+    boolean GamePaused = true;
 
     Timer timer;
     static public Random random;
 
     public Apple apple;
     public Snake snake;
+    String status = "You are snake";
+    String message = "Press Space to play";
 
-    //public static Image apple = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
     public static BufferedImage images;
-
-    public static Image headUp = Toolkit.getDefaultToolkit().getImage("./resources/headU.png");
-    public static Image headDown = Toolkit.getDefaultToolkit().getImage("./resources/headD.png");
-    public static Image headLeft = Toolkit.getDefaultToolkit().getImage("./resources/headL.png");
-    public static Image headRight = Toolkit.getDefaultToolkit().getImage("./resources/headR.png");
-
-    public static Image tailU = Toolkit.getDefaultToolkit().getImage("./resources/tailU.png");
-    public static Image tailD = Toolkit.getDefaultToolkit().getImage("./resources/tailD.png");
-    public static Image tailL = Toolkit.getDefaultToolkit().getImage("./resources/tailL.png");
-    public static Image tailR = Toolkit.getDefaultToolkit().getImage("./resources/tailR.png");
 
     public static Image curve1 = Toolkit.getDefaultToolkit().getImage("./resources/curve1.png");
     public static Image curve2 = Toolkit.getDefaultToolkit().getImage("./resources/curve2.png");
@@ -71,18 +59,7 @@ public class GamePanel extends JPanel implements ActionListener{
         apple = new Apple();
         snake = new Snake(Controls.WASD);
 
-        try {
-            images = ImageIO.read(
-                    Objects.requireNonNull(
-                            getClass().getResource("/sprite.png")
-                    )
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         apple.setImage(images.getSubimage(34, 34, 32, 32));
-
 
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -91,6 +68,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
         snake.clearArray();
         startGame();
+        timer.start();
     }
 
     public void startGame() {
@@ -98,23 +76,26 @@ public class GamePanel extends JPanel implements ActionListener{
         snake = new Snake(Controls.WASD);
 
         snake.setBodyArray(new Directions[GAME_UNITS]);
-        snake.setX(0, UNIT_SIZE*6);
+        snake.setX(0, UNIT_SIZE*4);
         snake.setY(0, UNIT_SIZE*12);
+        snake.setX(1, UNIT_SIZE*4);
+        snake.setY(1, UNIT_SIZE*13);
+        snake.setX(2, UNIT_SIZE*4);
+        snake.setY(2, UNIT_SIZE*14);
         snake.setApplesEaten(0);
-        snake.setBody(0, Directions.RIGHT);
-        snake.setBody(1, Directions.RIGHT);
-        snake.setBody(2, Directions.RIGHT);
+        snake.setBody(0, Directions.UP);
+        snake.setBody(1, Directions.UP);
+        snake.setBody(2, Directions.UP);
         snake.setAlive(true);
-        snake.setRunning(true);
+        snake.setRunning(false);
 
         try{
             bestScore = getBestScore();
         } catch (FileNotFoundException e) {
+            bestScore = 0;
             e.printStackTrace();
             System.out.println("Error found: File 'scores' not found.");
         }
-
-        timer.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -124,22 +105,13 @@ public class GamePanel extends JPanel implements ActionListener{
 
     public void draw(Graphics g) {
         if(snake.isAlive()) {
-            new Background(g,new Color(31, 99, 28),new Color(37, 117, 33));
+            new Background(g, new Color(31, 99, 28), new Color(37, 117, 33));
             g.drawImage(apple.getImage(), apple.getAppleX(), apple.getAppleY(), null);
-            snake.ImageChange(g,snake.getDirection(),snake.getBodyParts());
-            new Score(g,snake.getApplesEaten(),bestScore);
-
-//            Graphics2D g2d = (Graphics2D) g; // OBROT poprawny
-//
-//            AffineTransform old = g2d.getTransform();
-//
-//            g2d.rotate(Math.toRadians(90), apple.getAppleX()+16, apple.getAppleY()+16);
-//            g2d.drawImage(images.getSubimage(34, 34, 32, 32), apple.getAppleX(), apple.getAppleY(), null);
-//
-//            g2d.setTransform(old);
+            snake.ImageChange(g, snake.getDirection(), snake.getBodyParts());
+            new Score(g, snake.getApplesEaten(), bestScore);
 
             if(!snake.isRunning()){
-                new GamePaused(g);
+                new GamePaused(g, status, message);
             }
         }
         else {
@@ -153,7 +125,6 @@ public class GamePanel extends JPanel implements ActionListener{
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
             if(snake.isRunning()) {
@@ -162,16 +133,14 @@ public class GamePanel extends JPanel implements ActionListener{
                 if (snake.getBodyParts() >= 0) System.arraycopy(snake.getBodyArray(), 0, temp, 1, snake.getBodyParts());
                 snake.setBodyArray(temp);
                 if (snake.getBody(snake.getBodyParts() - 1) != snake.getBody(snake.getBodyParts() - 2)) {
-                    //body[bodyParts-1] = body[bodyParts-2];
+                    System.out.println("Direct change ..."); //body[bodyParts-1] = body[bodyParts-2];
                     snake.setBody(snake.getBodyParts() - 1, snake.getBody(snake.getBodyParts() - 2));
                 }
                 snake.Move();
                 apple.checkApple(snake);
             }
-
             if(!snake.checkCollisions()) {
                 snake.setAlive(false);
-                timer.stop();
             }
             repaint();
     }
@@ -179,7 +148,6 @@ public class GamePanel extends JPanel implements ActionListener{
     public class MyKeyAdapter extends KeyAdapter{
         @Override
         public void keyPressed(KeyEvent e) {
-
                 switch(e.getKeyCode()) {
                     case KeyEvent.VK_ESCAPE -> {
                         if (!GamePaused) {
@@ -193,12 +161,15 @@ public class GamePanel extends JPanel implements ActionListener{
                         break;
                     }
                     case KeyEvent.VK_SPACE -> {
+                        System.out.println("GamePaused status: " + GamePaused);
                         if (!GamePaused) {
                             GamePaused = true;
                             snake.setRunning(false);
                         } else {
                             GamePaused = false;
                             snake.setRunning(true);
+                            status = "Paused";
+                            message = "Press Space to continue";
                         }
                         break;
                     }
@@ -206,6 +177,9 @@ public class GamePanel extends JPanel implements ActionListener{
                         if (!snake.isAlive()) {
                             startGame();
                         }
+                        GamePaused = true;
+                        status = "You are snake";
+                        message = "Press Space to pla";
                         break;
                     }
                     case KeyEvent.VK_A -> {

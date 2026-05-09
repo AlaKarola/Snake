@@ -1,16 +1,13 @@
 package snake.game.PanelClasses.Objects;
 
-import javax.imageio.ImageIO;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Random;
 
 import static snake.game.GamePanel.*;
 
 public class Apple {
-    //Image appleImage = Toolkit.getDefaultToolkit().getImage("./resources/apple.png");
-    BufferedImage testapple; // = ImageIO.read(new File("sprite.png"));
+    BufferedImage testapple;
     int appleX;
     int appleY;
 

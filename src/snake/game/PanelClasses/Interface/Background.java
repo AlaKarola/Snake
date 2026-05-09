@@ -14,7 +14,7 @@ public class Background {
             color1 = color2;
             color2 = color3;
             for (int j = 0; j < SCREEN_WIDTH; j += UNIT_SIZE) {
-                if (i >= 64) {
+                if (i >= UNIT_SIZE*2) {
                     if ((j / UNIT_SIZE) % 2 == 0)
                         g.setColor(color1);
                     else
@@ -22,7 +22,7 @@ public class Background {
                 } else {
                     g.setColor(ramka);
                 }
-                if (j == 0 || j == 608 || i > 608) {
+                if (j == 0 || j == UNIT_SIZE*19 || i > UNIT_SIZE*19) {
                     g.setColor(ramka);
                 }
                 g.fillRect(j, i, UNIT_SIZE, UNIT_SIZE);
