@@ -165,7 +165,7 @@ public class GamePanel extends JPanel implements ActionListener{
                         }
                         GamePaused = true;
                         status = "You are snake";
-                        message = "Press Space to pla";
+                        message = "Press Space to play";
                     }
                     case KeyEvent.VK_A -> {
                         if (snake.getDirection() != Directions.RIGHT) {
