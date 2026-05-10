@@ -38,8 +38,11 @@ public class GamePanel extends JPanel implements ActionListener{
 
     GamePanel() {
         random = new Random();
-        apple = new Apple();
         snake = new Snake(Controls.WASD);
+        apple = new Apple(snake);
+
+        System.out.println(apple.getAppleX() + " - " + apple.getAppleY());
+
 
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
