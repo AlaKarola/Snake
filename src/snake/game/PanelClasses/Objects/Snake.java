@@ -147,22 +147,10 @@ public class Snake {
         return alive;
     }
 
-    private void drawRotated(Graphics2D g2d,
-                             BufferedImage image,
-                             int x,
-                             int y,
-                             double angle) {
-
+    private void drawRotated(Graphics2D g2d, BufferedImage image, int x, int y, double angle) {
         AffineTransform at = new AffineTransform();
-
         at.translate(x, y);
-
-        at.rotate(
-                Math.toRadians(angle),
-                image.getWidth() / 2.0,
-                image.getHeight() / 2.0
-        );
-
+        at.rotate(Math.toRadians(angle), image.getWidth() / 2.0, image.getHeight() / 2.0);
         g2d.drawImage(image, at, null);
     }
 

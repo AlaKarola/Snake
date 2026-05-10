@@ -23,20 +23,30 @@ public class Score extends JFrame {
 
     }
 
-    public static int getBestScore() throws FileNotFoundException {
+    public static int getBestScore() {
         int score = 0;
-        Scanner input = new Scanner(new File("./resources/scores.txt"));
-        while (input.hasNext()) {
-            String word  = input.next();
-            score = Integer. parseInt(word);
+        try (Scanner input = new Scanner(new File("./resources/scores.txt"))) {
+            while (input.hasNext()) {
+                String word  = input.next();
+                score = Integer. parseInt(word);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("#Exception -> File scores.txt not found, score set to 0.");
+            e.printStackTrace();
         }
+
         return score;
     }
 
-    public static void setBestScore(int bestScore) throws FileNotFoundException{
-        PrintWriter writer = new PrintWriter("./resources/scores.txt");
-        writer.print(bestScore);
-        writer.close();
+    public static void setBestScore(int bestScore){
+        try (PrintWriter writer = new PrintWriter("./resources/scores.txt")) {
+            writer.print(bestScore);
+        } catch (FileNotFoundException e){
+            System.err.println("#Exception -> File scores.txt not found, bestScore lost.");
+            e.printStackTrace();
+        }
+
+
     }
 
 

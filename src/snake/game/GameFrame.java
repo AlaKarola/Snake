@@ -2,7 +2,6 @@ package snake.game;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Objects;
 
 import static snake.game.GamePanel.images;
@@ -11,9 +10,12 @@ public class GameFrame extends JFrame{
     GameFrame(){
         try {
             images = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprite.png")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.err.println("#Fatal Exception: sprite image file not found");
+            e.printStackTrace();
+            System.exit(1);
         }
+
         this.add(new GamePanel());
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

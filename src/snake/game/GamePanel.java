@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.util.Random;
 
 import static snake.game.PanelClasses.Interface.Score.getBestScore;
@@ -72,13 +71,7 @@ public class GamePanel extends JPanel implements ActionListener{
         snake.setAlive(true);
         snake.setRunning(false);
 
-        try{
-            bestScore = getBestScore();
-        } catch (FileNotFoundException e) {
-            bestScore = 0;
-            e.printStackTrace();
-            System.out.println("Error found: File 'scores' not found.");
-        }
+        bestScore = getBestScore();
     }
 
     public void paintComponent(Graphics g) {
@@ -99,12 +92,8 @@ public class GamePanel extends JPanel implements ActionListener{
         }
         else {
             new GameOver(g, snake.getApplesEaten(), bestScore);
-            try {
-                setBestScore(bestScore);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                System.out.println("Error found: File 'scores' not found.");
-            }
+
+            setBestScore(bestScore);
         }
     }
 
