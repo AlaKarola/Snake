@@ -41,8 +41,6 @@ public class GamePanel extends JPanel implements ActionListener{
         apple = new Apple();
         snake = new Snake(Controls.WASD);
 
-        apple.setImage(images.getSubimage(34, 34, 32, 32));
-
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -56,20 +54,6 @@ public class GamePanel extends JPanel implements ActionListener{
     public void startGame() {
         timer = new Timer(DELAY,this);
         snake = new Snake(Controls.WASD);
-
-        snake.setBodyArray(new Directions[GAME_UNITS]);
-        snake.setX(0, UNIT_SIZE*4);
-        snake.setY(0, UNIT_SIZE*12);
-        snake.setX(1, UNIT_SIZE*4);
-        snake.setY(1, UNIT_SIZE*13);
-        snake.setX(2, UNIT_SIZE*4);
-        snake.setY(2, UNIT_SIZE*14);
-        snake.setApplesEaten(0);
-        snake.setBody(0, Directions.UP);
-        snake.setBody(1, Directions.UP);
-        snake.setBody(2, Directions.UP);
-        snake.setAlive(true);
-        snake.setRunning(false);
 
         bestScore = getBestScore();
     }

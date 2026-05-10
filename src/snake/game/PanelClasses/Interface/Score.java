@@ -19,7 +19,7 @@ public class Score extends JFrame {
         String score = "Score: " + applesEaten;
         g.drawString(score, (UNIT_SIZE*2), g.getFont().getSize());
         score = "Best score: " + bestScore;
-        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 32")), g.getFont().getSize());
+        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 00")), g.getFont().getSize());
 
     }
 
@@ -42,7 +42,7 @@ public class Score extends JFrame {
         try (PrintWriter writer = new PrintWriter("./resources/scores.txt")) {
             writer.print(bestScore);
         } catch (FileNotFoundException e){
-            System.err.println("#Exception -> File scores.txt not found, bestScore lost.");
+            System.err.println("#Exception -> File scores.txt not found, bestScore not updated.");
             e.printStackTrace();
         }
 

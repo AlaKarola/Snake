@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import static snake.game.GamePanel.*;
 
 public class Apple {
-    BufferedImage appleImage;
+    BufferedImage appleImage = images.getSubimage(34, 34, 32, 32);
     int appleX;
     int appleY;
 
@@ -29,19 +29,19 @@ public class Apple {
     }
 
     public static int newAppleX() {
-        return random.nextInt(18) * UNIT_SIZE + 32;
+        return random.nextInt(18) + 1;
     }
 
     public static int newAppleY() {
-        return random.nextInt(18) * UNIT_SIZE + 64;
+        return random.nextInt(18) + 2;
     }
 
     public int getAppleX() {
-        return appleX;
+        return appleX*UNIT_SIZE;
     }
 
     public int getAppleY() {
-        return appleY;
+        return appleY*UNIT_SIZE;
     }
 
     public BufferedImage getImage() {

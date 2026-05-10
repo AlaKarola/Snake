@@ -32,8 +32,19 @@ public class Snake {
         this.bodyParts = 3;
         this.applesEaten = 0;
         this.running = false;
-        this.alive = false;
+        this.alive = true;
         this.controls = con;
+
+        this.setX(0, 4);
+        this.setY(0, 12);
+        this.setX(1, 4);
+        this.setY(1, 13);
+        this.setX(2, 4);
+        this.setY(2, 14);
+        this.setBody(0, Directions.UP);
+        this.setBody(1, Directions.UP);
+        this.setBody(2, Directions.UP);
+
     }
 
     public void Move(){
@@ -43,19 +54,19 @@ public class Snake {
         }
         switch (direction) {
             case UP -> {
-                y[0] = y[0] - UNIT_SIZE;
+                y[0] = y[0] - 1;
                 snakeY = y[0];
             }
             case DOWN -> {
-                y[0] = y[0] + UNIT_SIZE;
+                y[0] = y[0] + 1;
                 snakeY = y[0];
             }
             case LEFT -> {
-                x[0] = x[0] - UNIT_SIZE;
+                x[0] = x[0] - 1;
                 snakeX = x[0];
             }
             case RIGHT -> {
-                x[0] = x[0] + UNIT_SIZE;
+                x[0] = x[0] + 1;
                 snakeX = x[0];
             }
         }
@@ -78,7 +89,7 @@ public class Snake {
                 else if (direction == Directions.LEFT) {
                     angle = 270;
                 }
-                drawRotated(g2d, images.getSubimage(0, 0, 32, 32), x[i], y[i], angle);
+                drawRotated(g2d, images.getSubimage(0, 0, 32, 32), x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, angle);
             } else {
                 if (i == bodyParts - 1) {
                     double angle = 0;
@@ -94,20 +105,20 @@ public class Snake {
                     else if (body[bodyParts - 1] == Directions.LEFT) {
                         angle = 270;
                     }
-                    drawRotated(g2d, images.getSubimage(0, 34, 32, 32), x[i], y[i], angle);
+                    drawRotated(g2d, images.getSubimage(0, 34, 32, 32), x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, angle);
                 } else {
                     BufferedImage curveSprite = images.getSubimage(34, 0, 32, 32);
                     if(body[i-1]==Directions.LEFT&&body[i]==Directions.DOWN||body[i-1]==Directions.UP&&body[i]==Directions.RIGHT){
-                        drawRotated(g2d, curveSprite, x[i], y[i], 180);
+                        drawRotated(g2d, curveSprite, x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, 180);
                     } else if(body[i-1]==Directions.RIGHT&&body[i]==Directions.UP||body[i-1]==Directions.DOWN&&body[i]==Directions.LEFT){
-                        drawRotated(g2d, curveSprite, x[i], y[i], 360);
+                        drawRotated(g2d, curveSprite, x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, 360);
                     } else if(body[i-1]==Directions.UP&&body[i]==Directions.LEFT||body[i-1]==Directions.RIGHT&&body[i]==Directions.DOWN){
-                        drawRotated(g2d, curveSprite, x[i], y[i], 270);
+                        drawRotated(g2d, curveSprite, x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, 270);
                     } else if(body[i-1]==Directions.DOWN&&body[i]==Directions.RIGHT||body[i-1]==Directions.LEFT&&body[i]==Directions.UP) {
-                        drawRotated(g2d, curveSprite, x[i], y[i], 90);
+                        drawRotated(g2d, curveSprite, x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, 90);
                     } else {
                         g.setColor(new Color(0, 24, 180));
-                        g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                        g.fillRect(x[i]*UNIT_SIZE, y[i]*UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
                     }
                 }
             }
@@ -125,22 +136,22 @@ public class Snake {
             }
         }
         //check if head touches left border
-        if(x[0] < UNIT_SIZE) {
+        if(x[0] < 1) {
             alive = false;
             System.out.println("-> Left Border Collision");
         }
         //check if head touches right border
-        if(x[0] >= SCREEN_WIDTH-UNIT_SIZE) {
+        if(x[0] >= (SCREEN_WIDTH-UNIT_SIZE)/UNIT_SIZE) {
             alive = false;
             System.out.println("-> Right Border Collision");
         }
         //check if head touches top border
-        if(y[0] < UNIT_SIZE*2) {
+        if(y[0] < 2) {
             alive = false;
             System.out.println("-> Top Border Collision");
         }
         //check if head touches bottom border
-        if(y[0] >= SCREEN_HEIGHT-UNIT_SIZE) {
+        if(y[0] >= (SCREEN_HEIGHT-UNIT_SIZE)/UNIT_SIZE) {
             alive = false;
             System.out.println("-> Bottom Border Collision");
         }
@@ -195,10 +206,6 @@ public class Snake {
 
     public int getBodyParts() {
         return bodyParts;
-    }
-
-    public void setApplesEaten(int i) {
-        this.applesEaten = i;
     }
 
     public int getApplesEaten() {
