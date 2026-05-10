@@ -6,7 +6,7 @@ import java.awt.*;
 import static snake.game.GamePanel.*;
 
 public class GameOver extends JFrame {
-    public GameOver(Graphics g, int applesEaten, int bestScore) {
+    public GameOver(Graphics g, int applesEaten, int bestScore, String status) {
         new Background(g,Color.black,Color.black);
 
         g.setColor((Color.black));
@@ -14,7 +14,6 @@ public class GameOver extends JFrame {
 
         new Score(g, applesEaten, bestScore);
 
-        String status = "Game Over";
         String message = "Press Esc to exit      Press R to play again";
 
         g.setColor(Color.CYAN);

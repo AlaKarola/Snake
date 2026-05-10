@@ -32,7 +32,8 @@ public class GamePanel extends JPanel implements ActionListener{
     public Apple apple;
     public Snake snake;
     boolean GamePaused = true;
-    String status = "You are snake";
+    String gameOverStatust = "Game Over";
+    String pauseStatus = "You are snake";
     String message = "Press Space to play";
     Timer timer;
 
@@ -40,9 +41,6 @@ public class GamePanel extends JPanel implements ActionListener{
         random = new Random();
         snake = new Snake(Controls.WASD);
         apple = new Apple(snake);
-
-        System.out.println(apple.getAppleX() + " - " + apple.getAppleY());
-
 
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -74,12 +72,11 @@ public class GamePanel extends JPanel implements ActionListener{
             new Score(g, snake.getApplesEaten(), bestScore);
 
             if(!snake.isRunning()){
-                new GamePaused(g, status, message);
+                new GamePaused(g, pauseStatus, message);
             }
         }
         else {
-            new GameOver(g, snake.getApplesEaten(), bestScore);
-
+            new GameOver(g, snake.getApplesEaten(), bestScore, gameOverStatust);
             setBestScore(bestScore);
         }
     }
@@ -97,6 +94,10 @@ public class GamePanel extends JPanel implements ActionListener{
                 }
                 snake.Move();
                 apple.checkApple(snake);
+                if(snake.getApplesEaten()>=321) {
+                    gameOverStatust = "You Won!";
+                    snake.setAlive(false);
+                }
             }
             if(!snake.checkCollisions()) {
                 snake.setAlive(false);
@@ -119,14 +120,14 @@ public class GamePanel extends JPanel implements ActionListener{
                         if (!snake.isAlive()) System.exit(0);
                     }
                     case KeyEvent.VK_SPACE -> {
-                        System.out.println("GamePaused status: " + GamePaused);
+                        System.out.println("GamePaused pauseStatus: " + GamePaused);
                         if (!GamePaused) {
                             GamePaused = true;
                             snake.setRunning(false);
                         } else {
                             GamePaused = false;
                             snake.setRunning(true);
-                            status = "Paused";
+                            pauseStatus = "Paused";
                             message = "Press Space to continue";
                         }
                     }
@@ -135,7 +136,8 @@ public class GamePanel extends JPanel implements ActionListener{
                             startGame();
                         }
                         GamePaused = true;
-                        status = "You are snake";
+                        gameOverStatust = "Game Over";
+                        pauseStatus = "You are snake";
                         message = "Press Space to play";
                     }
                     case KeyEvent.VK_A -> {

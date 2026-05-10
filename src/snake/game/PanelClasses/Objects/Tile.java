@@ -14,8 +14,7 @@ public class Tile {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Tile)) return false;
-        Tile other = (Tile) obj;
+        if (!(obj instanceof Tile other)) return false;
         return this.x == other.x && this.y == other.y;
     }
 
