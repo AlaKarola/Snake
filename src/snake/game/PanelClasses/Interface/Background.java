@@ -29,4 +29,8 @@ public class Background {
             }
         }
     }
+
+    public Background(Graphics g, Color c) {
+        new Background(g, c, c);
+    }
 }

@@ -1,6 +1,7 @@
 package snake.game;
 
 import snake.game.PanelClasses.Interface.Background;
+import snake.game.PanelClasses.Interface.Menu;
 import snake.game.PanelClasses.Interface.Score;
 import snake.game.PanelClasses.Interface.GameOver;
 import snake.game.PanelClasses.Interface.GamePaused;
@@ -32,8 +33,9 @@ public class GamePanel extends JPanel implements ActionListener{
     public Apple apple;
     public Snake snake;
     boolean GamePaused = true;
-    String gameOverStatust = "Game Over";
-    String pauseStatus = "You are snake";
+    boolean DuringGame = true;
+    String gameOverStatus = "Game Over";
+    String pauseStatus = "You are Snake";
     String message = "Press Space to play";
     Timer timer;
 
@@ -65,7 +67,9 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     public void draw(Graphics g) {
-        if(snake.isAlive()) {
+        if(!DuringGame) {
+            new Menu(g);
+        } else if(snake.isAlive()) {
             new Background(g, new Color(31, 99, 28), new Color(37, 117, 33));
             g.drawImage(apple.getImage(), apple.getAppleX(), apple.getAppleY(), null);
             snake.ImageChange(g, snake.getDirection(), snake.getBodyParts());
@@ -76,7 +80,7 @@ public class GamePanel extends JPanel implements ActionListener{
             }
         }
         else {
-            new GameOver(g, snake.getApplesEaten(), bestScore, gameOverStatust);
+            new GameOver(g,snake.getApplesEaten()  ,gameOverStatus);
             setBestScore(bestScore);
         }
     }
@@ -95,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener{
                 snake.Move();
                 apple.checkApple(snake);
                 if(snake.getApplesEaten()>=321) {
-                    gameOverStatust = "You Won!";
+                    gameOverStatus = "You Won!";
                     snake.setAlive(false);
                 }
             }
@@ -120,48 +124,59 @@ public class GamePanel extends JPanel implements ActionListener{
                         if (!snake.isAlive()) System.exit(0);
                     }
                     case KeyEvent.VK_SPACE -> {
-                        System.out.println("GamePaused pauseStatus: " + GamePaused);
-                        if (!GamePaused) {
-                            GamePaused = true;
-                            snake.setRunning(false);
-                        } else {
-                            GamePaused = false;
-                            snake.setRunning(true);
-                            pauseStatus = "Paused";
-                            message = "Press Space to continue";
+
+
+                        GraphicsEnvironment k = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+                        for(String font:k.getAvailableFontFamilyNames()) {
+
+                            System.out.println(font);
                         }
+                        if(DuringGame) {
+                            System.out.println("GamePaused pauseStatus: " + GamePaused);
+                            if (!GamePaused) {
+                                GamePaused = true;
+                                snake.setRunning(false);
+                            } else {
+                                GamePaused = false;
+                                snake.setRunning(true);
+                                pauseStatus = "Paused";
+                                message = "Press Space to continue";
+                            }
+                        }
+
                     }
                     case KeyEvent.VK_R -> {
                         if (!snake.isAlive()) {
                             startGame();
                         }
                         GamePaused = true;
-                        gameOverStatust = "Game Over";
-                        pauseStatus = "You are snake";
+                        gameOverStatus = "Game Over";
+                        pauseStatus = "You are Snake";
                         message = "Press Space to play";
                     }
-                    case KeyEvent.VK_A -> {
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> {
                         if (snake.getDirection() != Directions.RIGHT) {
                             if (snake.isRunning()) {
                                 snake.setDirection(Directions.LEFT);
                             }
                         }
                     }
-                    case KeyEvent.VK_D -> {
+                    case KeyEvent.VK_D,KeyEvent.VK_RIGHT  -> {
                         if (snake.getDirection() != Directions.LEFT) {
                             if (snake.isRunning()) {
                                 snake.setDirection(Directions.RIGHT);
                             }
                         }
                     }
-                    case KeyEvent.VK_W -> {
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                         if (snake.getDirection() != Directions.DOWN) {
                             if (snake.isRunning()) {
                                 snake.setDirection(Directions.UP);
                             }
                         }
                     }
-                    case KeyEvent.VK_S -> {
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                         if (snake.getDirection() != Directions.UP) {
                             if (snake.isRunning()) {
                                 snake.setDirection(Directions.DOWN);

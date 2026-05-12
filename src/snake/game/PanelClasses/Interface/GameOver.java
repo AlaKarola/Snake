@@ -6,24 +6,27 @@ import java.awt.*;
 import static snake.game.GamePanel.*;
 
 public class GameOver extends JFrame {
-    public GameOver(Graphics g, int applesEaten, int bestScore, String status) {
-        new Background(g,Color.black,Color.black);
-
-        g.setColor((Color.black));
-        g.fillRect(UNIT_SIZE,UNIT_SIZE*2,UNIT_SIZE*18,UNIT_SIZE*18);
+    public GameOver(Graphics g, int applesEaten, String status) {
+        new Background(g, Color.black);
 
         new Score(g, applesEaten, bestScore);
 
-        String message = "Press Esc to exit      Press R to play again";
+        String exitMessage = "Press Esc to exit";
+        String replayMesstage = "Press R to play again";
 
-        g.setColor(Color.CYAN);
-        g.setFont( new Font("Ink Free",Font.BOLD, 75));
+        g.setColor(Color.RED);
+        g.setFont(new Font("Ink Free", Font.BOLD, 90));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString(status, (SCREEN_WIDTH - metrics.stringWidth(status))/2, SCREEN_HEIGHT/2);
+        g.drawString(status, (SCREEN_WIDTH - metrics.stringWidth(status)) / 2, SCREEN_HEIGHT / 2);
 
         g.setColor(Color.white);
-        g.setFont( new Font("Ink Free",Font.BOLD, 25));
+        g.setFont(new Font("Ink Free", Font.BOLD, 25));
         metrics = getFontMetrics(g.getFont());
-        g.drawString(message, (SCREEN_WIDTH - metrics.stringWidth(message))/2, (SCREEN_HEIGHT/2)+UNIT_SIZE*3/2);
+        g.drawString(exitMessage, (SCREEN_WIDTH - metrics.stringWidth(exitMessage)) / 2, (SCREEN_HEIGHT / 2) + UNIT_SIZE * 4 / 2);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Ink Free", Font.BOLD, 25));
+        metrics = getFontMetrics(g.getFont());
+        g.drawString(replayMesstage, (SCREEN_WIDTH - metrics.stringWidth(replayMesstage)) / 2, (SCREEN_HEIGHT / 2) + UNIT_SIZE * 7 / 2);
     }
 }

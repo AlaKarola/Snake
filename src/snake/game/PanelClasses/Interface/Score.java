@@ -14,13 +14,12 @@ public class Score extends JFrame {
 
     public Score(Graphics g, int applesEaten, int bestScore ){
         g.setColor(Color.white);
-        g.setFont( new Font("Ink Free",Font.BOLD, 40));
+        g.setFont( new Font("Segoe Print",Font.BOLD, 35));
         FontMetrics metrics = getFontMetrics(g.getFont());
         String score = "Score: " + applesEaten;
-        g.drawString(score, (UNIT_SIZE*2), g.getFont().getSize());
-        score = "Best score: " + bestScore;
-        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 00")), g.getFont().getSize());
-
+        g.drawString(score, (UNIT_SIZE*2), g.getFont().getSize()+UNIT_SIZE/4);
+        score = "Best Score: " + bestScore;
+        g.drawString(score, (SCREEN_WIDTH - (UNIT_SIZE*2) -metrics.stringWidth("Best score: 00")), g.getFont().getSize()+UNIT_SIZE/4);
     }
 
     public static int getBestScore() {
@@ -34,7 +33,6 @@ public class Score extends JFrame {
             System.err.println("#Exception -> File scores.txt not found, score set to 0.");
             e.printStackTrace();
         }
-
         return score;
     }
 
@@ -45,9 +43,5 @@ public class Score extends JFrame {
             System.err.println("#Exception -> File scores.txt not found, bestScore not updated.");
             e.printStackTrace();
         }
-
-
     }
-
-
 }
