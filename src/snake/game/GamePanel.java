@@ -1,7 +1,6 @@
 package snake.game;
 
 import snake.game.PanelClasses.Interface.Background;
-import snake.game.PanelClasses.Interface.Menu;
 import snake.game.PanelClasses.Interface.Score;
 import snake.game.PanelClasses.Interface.GameOver;
 import snake.game.PanelClasses.Interface.GamePaused;
@@ -33,7 +32,6 @@ public class GamePanel extends JPanel implements ActionListener{
     public Apple apple;
     public Snake snake;
     boolean GamePaused = true;
-    boolean DuringGame = true;
     String gameOverStatus = "Game Over";
     String pauseStatus = "You are Snake";
     String message = "Press Space to play";
@@ -67,9 +65,7 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     public void draw(Graphics g) {
-        if(!DuringGame) {
-            new Menu(g);
-        } else if(snake.isAlive()) {
+         if(snake.isAlive()) {
             new Background(g, new Color(31, 99, 28), new Color(37, 117, 33));
             g.drawImage(apple.getImage(), apple.getAppleX(), apple.getAppleY(), null);
             snake.ImageChange(g, snake.getDirection(), snake.getBodyParts());
@@ -124,27 +120,16 @@ public class GamePanel extends JPanel implements ActionListener{
                         if (!snake.isAlive()) System.exit(0);
                     }
                     case KeyEvent.VK_SPACE -> {
-
-
-                        GraphicsEnvironment k = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-                        for(String font:k.getAvailableFontFamilyNames()) {
-
-                            System.out.println(font);
+                        System.out.println("GamePaused pauseStatus: " + GamePaused);
+                        if (!GamePaused) {
+                             GamePaused = true;
+                             snake.setRunning(false);
+                        } else {
+                            GamePaused = false;
+                            snake.setRunning(true);
+                            pauseStatus = "Paused";
+                            message = "Press Space to continue";
                         }
-                        if(DuringGame) {
-                            System.out.println("GamePaused pauseStatus: " + GamePaused);
-                            if (!GamePaused) {
-                                GamePaused = true;
-                                snake.setRunning(false);
-                            } else {
-                                GamePaused = false;
-                                snake.setRunning(true);
-                                pauseStatus = "Paused";
-                                message = "Press Space to continue";
-                            }
-                        }
-
                     }
                     case KeyEvent.VK_R -> {
                         if (!snake.isAlive()) {

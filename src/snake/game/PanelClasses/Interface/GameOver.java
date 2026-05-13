@@ -8,7 +8,6 @@ import static snake.game.GamePanel.*;
 public class GameOver extends JFrame {
     public GameOver(Graphics g, int applesEaten, String status) {
         new Background(g, Color.black);
-
         new Score(g, applesEaten, bestScore);
 
         String exitMessage = "Press Esc to exit";
