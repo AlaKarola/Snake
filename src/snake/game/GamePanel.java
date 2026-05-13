@@ -16,8 +16,8 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import static snake.game.PanelClasses.Interface.Score.getBestScore;
-import static snake.game.PanelClasses.Interface.Score.setBestScore;
+import static snake.game.PanelClasses.Objects.ScoreHandler.getBestScore;
+import static snake.game.PanelClasses.Objects.ScoreHandler.setBestScore;
 
 public class GamePanel extends JPanel implements ActionListener{
     static public final int UNIT_SIZE = 32;
